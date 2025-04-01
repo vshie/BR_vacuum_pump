@@ -259,10 +259,10 @@ void loop() {
   if (absDiff >= 100.0) numDigits++;
   
   // Adjust text size based on number of digits
-  if (numDigits > 2) {
-    display.setTextSize(2);  // Smaller size for 3+ digits
+  if (numDigits > 1) {
+    display.setTextSize(2);  // Smaller size for 2+ digits
   } else {
-    display.setTextSize(3);  // Larger size for 1-2 digits
+    display.setTextSize(3);  // Larger size for 1 digit
   }
   
   display.setTextColor(SSD1306_WHITE);
@@ -271,7 +271,9 @@ void loop() {
   // Show negative sign and value only when pressure is significantly below ambient
   if (sensor.pressure() < initialPressure) {
     if (absDiff > 0.1) {
-      display.print("-");
+      // Use a more compact negative sign by drawing a line
+      display.drawLine(0, 19, 8, 19, SSD1306_WHITE);  // Shifted up by 4 pixels from previous position (23-4=19)
+      display.setCursor(10, 35);  // Move cursor after the line
       display.print(absDiff, 1);
     } else {
       display.print("0.0");
@@ -283,7 +285,7 @@ void loop() {
   // Set up for PSI text
   display.setFont(&FreeSansBold9pt7b);
   display.setTextSize(1.5);
-  display.setCursor(0, 55);
+  display.setCursor(0, 63);  // Moved PSI text to bottom of screen
   display.print("PSI");
   
   // Create rotated version of logo
